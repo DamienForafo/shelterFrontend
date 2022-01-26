@@ -1,0 +1,22 @@
+{
+  "name": "shelterfrontend",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "svelte-kit dev",
+    "build": "svelte-kit build",
+    "package": "svelte-kit package",
+    "preview": "svelte-kit preview"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/kit": "next",
+    "less": "^4.1.2",
+    "svelte": "^3.44.0",
+    "svelte-preprocess": "^4.10.2",
+    "svelte-preprocess-less": "^0.4.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^14.3.2"
+  }
+}
