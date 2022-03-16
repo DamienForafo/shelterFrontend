@@ -5,8 +5,22 @@
     let topBarClasses = '';
     let topBar;
     let topBarOffsetTop = 0;
+    let mainTagDiv;
+    let tags;
+    let tagsClasses = '';
+    let tagsInitialWidth = 500;
+    let mainTagWord = '';
+    let mainTagExists = false;
+    $: mainTagExists = (mainTagWord !== '');
+    function handleResize() {
+        const mainTagDivWidth = (mainTagExists) ? mainTagDiv.offsetWidth : 0;
+        realTags.style.setProperty('--mainTagDivWidth', mainTagDivWidth + 'px');
+        tagsClasses = (tagsInitialWidth > document.body.offsetWidth) ? 'fullWidth' : '';
+    };
     onMount(() => {
-        topBarOffsetTop = topBar.offsetTop;
+        tags.style.setProperty('--tagsInitialWidth', tagsInitialWidth + 'px')
+        topBarOffsetTop = topBar.offsetTop; 
+        handleResize();
     });
     function manageScroll(e) {
         document.body.style.setProperty('--scroll', window.pageYOffset / (document.body.offsetHeight - window.innerHeight)); // % of the page
@@ -19,13 +33,55 @@
 </script>
 
 
-<svelte:window on:scroll={manageScroll}/>
+<svelte:window on:scroll={manageScroll} on:resize={handleResize}/>
 
 <div bind:this={topBar} id ="topBar" class={topBarClasses}>
     <div id="topBarBackground"></div>
     <input id="searchInput" type="text" name="searchInput">
-    <div id="tags">
-
+    <div id="tags" bind:this={tags} class={tagsClasses}>
+        {#if mainTagExists}
+        <div id="mainTagDiv" bind:this={mainTagDiv}>
+            <div id="backButton"></div>
+            <div id="mainTag" class="tag">
+                <p>cliqué</p>
+            </div>
+        </div>
+        {/if}
+        <div id="realTags">
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+            <div class="tag">
+                <p>coucou</p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -54,11 +110,17 @@
 </div>
 
 <style global lang="less">
+    :root {
+        --topBarHeight: 150px;
+        --cardsMargin: 90vh;
+        --semiMargin: calc((var(--cardsMargin) - var(--topBarHeight)) / 2);
+        --topScroll: 0;
+        --tagsPadding: 5px 10px;
+        --itemMargin: 0 5px;
+    }
+
     body {
         margin: 0;
-        --topBarHeight: 120px;
-        --cardsMargin: 90vh;
-        --semiMargin: calc(~"(var(--cardsMargin) - var(--topBarHeight)) / 2");
     }
 
     #cards {
@@ -80,7 +142,7 @@
     #topBar {
         position: -webkit-sticky;
         position: sticky;
-        top: calc(~"0px - var(--topBarHeight) - 1px");
+        top: calc(0px - var(--topBarHeight) - 1px);
         margin-top: var(--semiMargin);
         left: 0;
         width : 100%;
@@ -109,10 +171,58 @@
             z-index: 1;
         }
         #tags {
-            width: 200px;
-            height: 40px;
-            background: blueviolet;
             z-index: 1;
+            position: relative;
+            display: flex;
+            width: var(--tagsInitialWidth);
+            > #mainTagDiv {
+                height: 100%;
+                background: khaki;
+                padding: var(--tagsPadding);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                > #backButton {
+                    min-width: 30px;
+                    min-height: 30px;
+                    background: red;
+                    margin: var(--itemMargin);
+                }
+            }
+            > #realTags {
+                width: 100%;
+                height: 100%;
+                padding: var(--tagsPadding);
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                overflow-x: auto;
+                overflow-y: hidden;
+                background: blueviolet;
+                overflow-x: scroll;
+            }
+            .tag {
+                width: fit-content;
+                background: grey;
+                border-radius: 30px;
+                height: fit-content;
+                padding: 5px 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: var(--itemMargin);
+                > p {
+                    width: fit-content;
+                    text-align: center;
+                    margin: 0;
+                }
+            }
+            &.fullWidth {
+                width: 100%;
+                > #realTags {
+                    width: calc(100% - var(--mainTagDivWidth));
+                }
+            }
         }
     }
 </style>
